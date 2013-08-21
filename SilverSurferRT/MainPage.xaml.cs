@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
+using SilverSurferLib.Tokens;
 
 namespace SilverSurfer
 {
@@ -24,13 +25,13 @@ namespace SilverSurfer
     {
         private ViewModel viewModel;
         private Evaluator evaluator;
-        private Dictionary<string, SilverExpression> cache;
+        private Dictionary<string, Token> cache;
 
         public MainPage()
         {
             this.InitializeComponent();
             evaluator = new Evaluator();
-            cache = new Dictionary<string, SilverExpression>();
+            cache = new Dictionary<string, Token>();
             DataContext = (viewModel = new ViewModel());
             RefreshVariables();
         }
@@ -76,7 +77,7 @@ namespace SilverSurfer
                 return;
 
             double? result = null;
-            SilverExpression expression = new SilverExpression(input);
+            Token expression = Evaluator.Parse(input);
             string info = string.Empty;
 
             try
@@ -107,7 +108,7 @@ namespace SilverSurfer
             cache[input] = expression;
             RefreshVariables();
         }
-        private void Evaluate(SilverExpression e)
+        private void Evaluate(Token e)
         {
             double? result = null;
             string info = string.Empty;
@@ -154,7 +155,7 @@ namespace SilverSurfer
         private void SaveExpressionClick(object sender, RoutedEventArgs e)
         {
             Button b = (sender as Button);
-            SilverExpression expr = (b.Tag as SilverExpression);
+            var expr = (b.Tag as Token);
             viewModel.SavedExpressions.Insert(0, expr);
         }
         private void List_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -166,9 +167,9 @@ namespace SilverSurfer
 
             var selectedItem = e.AddedItems.First();
 
-            if (selectedItem is SilverExpression)
+            if (selectedItem is Token)
             {
-                Evaluate(selectedItem as SilverExpression);
+                Evaluate(selectedItem as Token);
             }
             else if (selectedItem is Tuple<string, double>)
             {

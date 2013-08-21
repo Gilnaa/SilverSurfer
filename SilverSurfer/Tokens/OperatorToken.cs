@@ -12,7 +12,7 @@ namespace SilverSurferLib.Tokens
         public Token RightSideOperand { get; set; }
         public Operators Operator { get; set; }
 
-        public override double Evaluate(Evaluator evaluator)
+        internal override double Evaluate(Evaluator evaluator)
         {
             if (Operator == Operators.Set)
             {

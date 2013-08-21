@@ -10,7 +10,7 @@ namespace SilverSurferLib.Tokens
     {
         public string FunctionName { get; set; }
         public Token[] Arguments { get; set; }
-        public override double Evaluate(Evaluator evaluator)
+        internal override double Evaluate(Evaluator evaluator)
         {
             FunctionCallback function;
             bool success = evaluator.Functions.TryGetValue(FunctionName, out function);

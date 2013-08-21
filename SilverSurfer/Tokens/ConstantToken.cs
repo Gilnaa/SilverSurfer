@@ -17,7 +17,7 @@ namespace SilverSurferLib.Tokens
         {
             Value = value;
         }
-        public override double Evaluate(Evaluator evaluator)
+        internal override double Evaluate(Evaluator evaluator)
         {
             return Value;
         }

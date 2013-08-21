@@ -1,4 +1,5 @@
 ﻿using SilverSurferLib;
+using SilverSurferLib.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace SilverSurfer
         public string Info { get; set; }
         public SolidColorBrush InfoColor { get; set; }
 
-        public SilverExpression Expression { get; set; }
+        public Token Expression { get; set; }
         public string RawExpression { get; set; }
         public double? Result { get; set; }
     }

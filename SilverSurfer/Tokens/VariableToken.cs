@@ -9,7 +9,7 @@ namespace SilverSurferLib.Tokens
     public class VariableToken : Token
     {
         public string VariableName { get; set; }
-        public override double Evaluate(Evaluator evaluator)
+        internal override double Evaluate(Evaluator evaluator)
         {
             double result;
             bool success = evaluator.Variables.TryGetValue(VariableName, out result);
