@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows 8
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverSurfer", "SilverSurfer\SilverSurfer.csproj", "{2C85F99B-5B0C-419A-B064-DDC1AEEB8A4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverSurferRT", "SilverSurferRT\SilverSurferRT.csproj", "{2C85F99B-5B0C-419A-B064-DDC1AEEB8A4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverSurferLib", "SilverSurferLib\SilverSurferLib.csproj", "{CAFD7484-BF34-4E87-8094-CF6F977F99FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverSurfer", "SilverSurfer\SilverSurfer.csproj", "{CAFD7484-BF34-4E87-8094-CF6F977F99FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
