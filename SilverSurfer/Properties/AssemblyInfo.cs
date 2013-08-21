@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SilverSurferLib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SilverSurfer")]
+[assembly: AssemblyDescription("SilverSurfer is a mathematical expression parsing and evaluation library.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Gilad Naaman")]
 [assembly: AssemblyProduct("SilverSurferLib")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCopyright("Copyright © 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
