@@ -66,15 +66,21 @@ namespace SilverSurferLib
         }
         public static int Presedence(string op1, string op2)
         {
-            if(!IsOperator(op1) || !IsOperator(op2))
+            if (!IsOperator(op1) || !IsOperator(op2))
                 throw new ArgumentException();
-            if(op1 == op2)
+            if (op1 == op2)
+                return 0;
+            return GetPresedence(op1) - GetPresedence(op2);
+        }
+        public static int Presedence(SilverSurferLib.Tokens.OperatorToken.Operators op1, SilverSurferLib.Tokens.OperatorToken.Operators op2)
+        {
+            if (op1 == op2)
                 return 0;
             return GetPresedence(op1) - GetPresedence(op2);
         }
         public static int GetPresedence(this string op)
         {
-            switch(op)
+            switch (op)
             {
                 case "^":
                     return 4;
@@ -89,6 +95,10 @@ namespace SilverSurferLib
                 default:
                     return 0;
             }
+        }
+        public static int GetPresedence(this SilverSurferLib.Tokens.OperatorToken.Operators op)
+        {
+            return ((char)op).ToString().GetPresedence();
         }
         public static Associativity GetAssociativity(this string op)
         {

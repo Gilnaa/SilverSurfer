@@ -18,6 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,26 +58,7 @@ namespace SilverSurferLib
         /// </summary>
         public Evaluator()
         {
-            Functions = new Dictionary<string, FunctionCallback>
-            {
-                {"abs", DefaultFunctions.Abs},
-                {"sin", DefaultFunctions.Sin},
-                {"cos", DefaultFunctions.Cos},
-                {"tan", DefaultFunctions.Tan},
-                {"asin", DefaultFunctions.Asin},
-                {"acos", DefaultFunctions.Acos},
-                {"atan", DefaultFunctions.Atan},
-                {"min", DefaultFunctions.Min},
-                {"max", DefaultFunctions.Max},
-                {"log", DefaultFunctions.Log},
-                {"log10", DefaultFunctions.Log10},
-            };
-            Variables = new Dictionary<string, double>
-            {
-                {"e", Math.E},
-                {"pi", Math.PI}
-            };
-            Settings = new Settings();
+            Clear();
         }
         /// <summary>
         /// Evaluates the specified expression using this object's data.
@@ -93,10 +75,23 @@ namespace SilverSurferLib
             Variables["ans"] = ans;
             return ans;
         }
+        public double Evaluate(string e)
+        {
+            return Evaluate(Parse(e));
+        }
+        private static Dictionary<string, Token> cache;
+        static Evaluator()
+        {
+            cache = new Dictionary<string, Token>();
+        }
         public static Token Parse(string expression)
         {
+            expression = expression.Replace(" ", string.Empty).Replace("\t", string.Empty);
+            if (cache.ContainsKey(expression))
+                return cache[expression];
+
             var Parsed = ConvertToPostfix(expression);
-            return Tokenize(Parsed);
+            return (cache[expression] = Tokenize(Parsed));
         }
         static Token Tokenize(Stack<string> postfixExpression)
         {
@@ -271,6 +266,30 @@ namespace SilverSurferLib
             if (outp.Length > 0)
                 tokens.Enqueue(outp);
             return tokens;
+        }
+
+        public void Clear()
+        {
+            Functions = new Dictionary<string, FunctionCallback>
+            {
+                {"abs", DefaultFunctions.Abs},
+                {"sin", DefaultFunctions.Sin},
+                {"cos", DefaultFunctions.Cos},
+                {"tan", DefaultFunctions.Tan},
+                {"asin", DefaultFunctions.Asin},
+                {"acos", DefaultFunctions.Acos},
+                {"atan", DefaultFunctions.Atan},
+                {"min", DefaultFunctions.Min},
+                {"max", DefaultFunctions.Max},
+                {"log", DefaultFunctions.Log},
+                {"log10", DefaultFunctions.Log10},
+            };
+            Variables = new Dictionary<string, double>
+            {
+                {"e", Math.E},
+                {"pi", Math.PI}
+            };
+            Settings = new Settings();
         }
     }
 }

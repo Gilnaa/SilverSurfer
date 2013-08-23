@@ -1,4 +1,5 @@
 ﻿using SilverSurferLib;
+using SilverSurferLib.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,9 +14,9 @@ namespace SilverSurfer
         public ViewModel()
         {
             History = new ObservableCollection<LogModel>();
-            SavedExpressions = new ObservableCollection<SilverExpression>();
+            SavedExpressions = new ObservableCollection<Token>();
         }
-        public ObservableCollection<SilverExpression> SavedExpressions { get; set; }
+        public ObservableCollection<Token> SavedExpressions { get; set; }
         public ObservableCollection<LogModel> History { get; set; }
     }
 }

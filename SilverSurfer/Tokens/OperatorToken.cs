@@ -75,7 +75,19 @@ namespace SilverSurferLib.Tokens
         }
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}", LeftSideOperand, (char)Operator, RightSideOperand);
+            string leftOpr = LeftSideOperand.ToString();
+            string rightOpr = RightSideOperand.ToString();
+            if (LeftSideOperand is OperatorToken)
+            {
+                if (Utils.Presedence(Operator, (LeftSideOperand as OperatorToken).Operator) > 0)
+                    leftOpr = "(" + leftOpr + ")";
+            }
+            if (RightSideOperand is OperatorToken)
+            {
+                if (Utils.Presedence(Operator, (RightSideOperand as OperatorToken).Operator) > 0)
+                    rightOpr = "(" + rightOpr + ")";
+            }
+            return string.Format("{0} {1} {2}", leftOpr, (char)Operator, rightOpr);
         }
         public override IEnumerable<string> Variables
         {

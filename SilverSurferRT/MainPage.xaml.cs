@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
 using SilverSurferLib.Tokens;
+using System.Collections.ObjectModel;
 
 namespace SilverSurfer
 {
@@ -23,15 +24,14 @@ namespace SilverSurfer
     /// </summary>
     public sealed partial class MainPage : SilverSurfer.Common.LayoutAwarePage
     {
+        private const string HistoryKey = "History";
+
         private ViewModel viewModel;
         private Evaluator evaluator;
-        private Dictionary<string, Token> cache;
-
         public MainPage()
         {
             this.InitializeComponent();
             evaluator = new Evaluator();
-            cache = new Dictionary<string, Token>();
             DataContext = (viewModel = new ViewModel());
             RefreshVariables();
         }
@@ -52,6 +52,11 @@ namespace SilverSurfer
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
+            if (pageState == null)
+                return;
+
+            if (pageState.ContainsKey(HistoryKey))
+                viewModel.History = pageState[HistoryKey] as ObservableCollection<LogModel>;
         }
 
         /// <summary>
@@ -62,51 +67,17 @@ namespace SilverSurfer
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
+            pageState[HistoryKey] = viewModel.History;
         }
 
         private void Evaluate()
         {
             string input = InputEntry.Text.Replace(" ", string.Empty);
-            if (cache.ContainsKey(input))
-            {
-                Evaluate(cache[input]);
-                return;
-            }
 
             if (string.IsNullOrWhiteSpace(input))
                 return;
 
-            double? result = null;
-            Token expression = Evaluator.Parse(input);
-            string info = string.Empty;
-
-            try
-            {
-                result = evaluator.Evaluate(expression);
-                InputEntry.Text = result.ToString();
-                InputEntry.SelectionStart = InputEntry.Text.Length;
-                InputEntry.SelectionLength = 0;
-            }
-            catch (EvaluationException e)
-            {
-                info = e.Message;
-            }
-            catch (Exception)
-            {
-                info = "Could not evaluate the expression due to an unknown problem";
-            }
-            viewModel.History.Insert(0,
-                new LogModel
-                {
-                    Expression = expression,
-                    RawExpression = input,
-                    Result = result,
-                    Info = info,
-                    InfoColor = new SolidColorBrush(Windows.UI.Colors.LightGray)
-                });
-
-            cache[input] = expression;
-            RefreshVariables();
+            Evaluate(Evaluator.Parse(input));
         }
         private void Evaluate(Token e)
         {
@@ -132,7 +103,7 @@ namespace SilverSurfer
                 new LogModel
                 {
                     Expression = e,
-                    RawExpression = e.Raw,
+                    RawExpression = e.ToString(),
                     Result = result,
                     Info = info,
                     InfoColor = new SolidColorBrush(Windows.UI.Colors.LightGray)
@@ -142,7 +113,6 @@ namespace SilverSurfer
         private void EvaluateExpression_Click(object sender, RoutedEventArgs e)
         {
             Evaluate();
-            // this.Frame.Navigate(typeof(PlotPage));
         }
 
         private void InputEntry_KeyUp(object sender, KeyRoutedEventArgs e)
@@ -171,15 +141,22 @@ namespace SilverSurfer
             {
                 Evaluate(selectedItem as Token);
             }
-            else if (selectedItem is Tuple<string, double>)
+            else
             {
-                string insertText = (e.AddedItems.First() as Tuple<string, double>).Item1;
+                string insertText = (e.AddedItems.First() as dynamic).Key;
                 InputEntry.SelectedText = insertText;
                 InputEntry.SelectionStart = InputEntry.SelectionStart + InputEntry.SelectionLength;
                 InputEntry.SelectionLength = 0;
             }
             InputEntry.Focus(FocusState.Pointer);
             list.SelectedIndex = -1;
+        }
+
+        private void ClearData_Click(object sender, RoutedEventArgs e)
+        {
+            evaluator.Clear();
+            DataContext = (viewModel = new ViewModel());
+            RefreshVariables();
         }
     }
 }
